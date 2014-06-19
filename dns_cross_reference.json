@@ -1,0 +1,6 @@
+{
+    "ip-10-213-232-231.us-west-2.compute.internal": "server01.domain.com",
+    "ip-10-213-232-232.us-west-2.compute.internal": "server02.domain.com",
+    "ip-10-213-232-233.us-west-2.compute.internal": "server03.domain.com",
+    "ip-10-213-232-234.us-west-2.compute.internal": "server04.domain.com"
+}

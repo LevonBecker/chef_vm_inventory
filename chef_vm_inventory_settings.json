@@ -1,0 +1,14 @@
+{
+    "output_path": "/home/username/Documents/chef_vm_inventory",
+    "output_filename": "my_select_environments",
+    "chef_config": {
+        "node_name": "username",
+        "client_key": "/home/username/.chef/username.pem",
+        "chef_server_url": "https://chefserver.domain.com"
+    },
+    "environments": [
+        "env01",
+        "env02",
+        "env03"
+    ]
+}
