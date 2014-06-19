@@ -1,4 +1,4 @@
-# Chef VM Inventory MediaWiki
+# Chef VM Inventory
 
 A simple command line tool to get inventory of Chef nodes from the Chef server and output as MediaWiki wikitext, JSON, YAML, or CSV. The nodes are organized based on their environment.
 
