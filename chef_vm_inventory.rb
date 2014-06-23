@@ -10,6 +10,7 @@
   require 'pp'
   require 'open3'
   require 'chef'
+  # require 'media_wiki'
 
 #endregion Includes
 
@@ -67,7 +68,7 @@
   end
 
   # Versions
-  @script_version  = '1.0.2-20140619'
+  @script_version  = '1.0.3-20140619'
 
 #endregion Variables
 
@@ -122,8 +123,11 @@
         '_default'
     ]
 
+    # Query Chef Server for List of Environments
+    # Returns a Chef Environment Object
     get_env = Chef::Environment.list('*')
 
+    # Remove Excluded from List and Convert to Array
     filtered_envs = Array.new
     get_env.keys.each do |env|
       unless exclude_list.include?(env)
@@ -133,7 +137,7 @@
 
     edited_envs = Array.new
     filtered_envs.each do |env|
-      edited_envs << env.gsub(/uat|dev|qa|stg|stage|prd|prod/, '')
+      edited_envs << env.gsub(/(uat|dev|qa|stg|stage|prd|prod)$/, '')
     end
 
     @envs = Array.new
@@ -216,7 +220,6 @@ EOH
     end
   end
 
-  # TODO: WIP
   def format_csv
     # Table Header
     header = <<-EOH
@@ -232,6 +235,13 @@ Root Environment,Server,Name,Node Name,DNS,Alias,Environment,Roles,CPU,RAM,HD,IP
       end
     end
   end
+
+  # TODO: WIP
+  # def output_post_mediawiki
+  #   mw = MediaWiki::Gateway.new('https://infracoe.nike.net/wiki/api.php')
+  #   mw.login('RubyBot', 'pa$$w0rd')
+  #   mw.create('Reference:VM_Inventory', 'Hello world!', :summary => 'My first page')
+  # end
 
   def output_console_mediawiki
     show_header
@@ -312,6 +322,7 @@ Root Environment,Server,Name,Node Name,DNS,Alias,Environment,Roles,CPU,RAM,HD,IP
   begin
     choose do |menu|
       menu.prompt  =  '> '
+      # menu.choice(:Post_to_MediaWiki) { puts 'Post to MediaWiki Selected'; @output_method = 'post_mediawiki' }
       menu.choice(:Console_MediaWiki) { puts 'Console MediaWiki Selected'; @output_method = 'console_mediawiki' }
       menu.choice(:File_MediaWiki) { puts 'File MediaWiki Selected'; @output_method = 'file_mediwiki' }
       menu.choice(:File_CSV) { puts 'File CSV Selected'; @output_method = 'file_csv' }
@@ -349,7 +360,9 @@ Root Environment,Server,Name,Node Name,DNS,Alias,Environment,Roles,CPU,RAM,HD,IP
   show_subheader('GENERATING OUTPUT')
   puts 'Please Wait...'
   puts ''
-  if @output_method == 'console_mediawiki'
+  if @output_method == 'post_mediawiki'
+    # output_post_mediawiki
+  elsif @output_method == 'console_mediawiki'
     output_console_mediawiki
   elsif @output_method == 'file_mediwiki'
     output_file_mediawiki
